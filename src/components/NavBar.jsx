@@ -19,15 +19,19 @@ export const NavBar = ({ setClima }) => {
   };
 
   return (
-    <nav className=" w-full h-16  mt-3 flex items-center justify-around px-4">
-      <div className="max-w-60 bg-gray-100 p-2.5 rounded-lg flex gap-1 items-center">
-        <img className="  w-7 h-7" src="cloud-fill.svg" alt="cloud-icon" />
+    <header className=" w-full h-16  mt-3 flex items-center justify-around px-4">
+      <nav className="max-w-60 bg-gray-100 p-2.5 rounded-lg flex gap-1 items-center">
+        <img
+          className="  w-7 h-7"
+          src="/src/assets/icons/cloud-fill.svg"
+          alt="cloud-icon"
+        />
         <h1 className="text-xl font-semibold ">Weatherly</h1>
-      </div>
+      </nav>
       <button className="w-2/4  bg-gray-100 flex gap-1 items-center p-2 rounded-md ">
         <img
           className="w-8 h-full cursor-pointer"
-          src="search.svg"
+          src="/src/assets/icons/search.svg"
           alt="Search Icon"
           onClick={handleSearch}
         />
@@ -40,6 +44,6 @@ export const NavBar = ({ setClima }) => {
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
       </button>
-    </nav>
+    </header>
   );
 };
