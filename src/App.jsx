@@ -22,7 +22,7 @@ function App() {
     <>
       <NavBar setClima={setClima} />
       <OverviewMain clima={clima} />
-      <NextsDays setClima={setClima} />
+      <NextsDays clima={clima} />
     </>
   );
 }
