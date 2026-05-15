@@ -1,14 +1,17 @@
 import { ownDate, ownDateDay } from "../utils/date.utils";
+import type { WeatherData } from "../types/weather";
 
-export const OverviewMain = ({ clima }) => {
+interface OverviewMainProps {
+  clima: WeatherData;
+}
+
+export const OverviewMain = ({ clima }: OverviewMainProps) => {
   return (
     <main>
       <h1 className="text-black text-4xl p-4 font-semibold ">Today Overview</h1>
-      {/* Container */}
-      <div className=" flex justify-start  max-h-[34.3rem]  ">
+      <div className=" flex justify-start  max-h-[34.3rem] w-full  ">
         <div className=" w-full grid  grid-cols-4 px-4 gap-4 ">
           <div className=" rounded-2xl">
-            {/* main card */}
             <div className="flex flex-col gap-8 items-start p-10  bg-slate-200  rounded-2xl">
               {
                 <img
@@ -37,7 +40,6 @@ export const OverviewMain = ({ clima }) => {
               </div>
             </div>
           </div>
-          {/* mini cards-1 */}
           <div className=" flex flex-col gap-16  ">
             <div className="p-4 bg-slate-200 rounded-2xl grid grid-cols-3  ">
               <img
@@ -48,7 +50,6 @@ export const OverviewMain = ({ clima }) => {
               <div className="grid col-span-2">
                 <p>Wind Speed</p>
                 <div className=" text-2xl ">{clima.current.wind_kph} km/h</div>
-                {/* wind_kph */}
               </div>
             </div>
             <div className="p-4 bg-slate-200 rounded-2xl grid grid-cols-3  ">
@@ -59,9 +60,7 @@ export const OverviewMain = ({ clima }) => {
               />{" "}
               <div className="grid col-span-2">
                 <p>Atmospheric Pressure</p>
-                <div className=" text-2xl ">
-                  {clima.current.pressure_mb} hPa
-                </div>
+                <div className=" text-2xl ">{clima.current.pressure_mb} hPa</div>
               </div>
             </div>
 
@@ -94,7 +93,6 @@ export const OverviewMain = ({ clima }) => {
             </div>
           </div>
 
-          {/* mini cards-2 */}
           <div className=" flex flex-col gap-16   ">
             <div className="p-4 bg-slate-200 rounded-2xl grid grid-cols-3  ">
               <img
@@ -154,7 +152,7 @@ export const OverviewMain = ({ clima }) => {
           </div>
           <div className="text-xl bg-slate-200 rounded-2xl p-4 flex flex-col gap-7 font-semibold ">
             {clima.forecast.forecastday[0].hour
-              .filter((_, index) => index % 3 === 0) // cada 3 horas
+              .filter((_, index) => index % 3 === 0)
               .slice(3, 25)
               .map((h, i) => (
                 <div key={i} className="flex flex-col p-2">
@@ -166,14 +164,14 @@ export const OverviewMain = ({ clima }) => {
                   <div className="flex justify-between ">
                     <p>
                       {(() => {
-                        const [hourStr] = h.time.split(" ")[1].split(":");
-                        const hour = parseInt(hourStr);
+                        const timePart = h.time.split(" ")[1] ?? "00:00";
+                        const [hourStr = "0"] = timePart.split(":");
+                        const hour = Number.parseInt(hourStr, 10);
                         const ampm = hour < 12 ? "AM" : "PM";
                         const hour12 = hour % 12 || 12;
                         return `${hour12}:00 ${ampm}`;
                       })()}
                     </p>{" "}
-                    {/* Ej: "03:00" */}
                     <p>{h.condition.text}</p>
                   </div>
                 </div>

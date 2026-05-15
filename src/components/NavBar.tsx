@@ -1,21 +1,52 @@
-import { getClima, searchLocations } from "../api/wheatherApi";
 import { useState } from "react";
+import type {
+  ChangeEvent,
+  Dispatch,
+  KeyboardEvent,
+  SetStateAction,
+} from "react";
+import { getClima, searchLocations } from "../api/wheatherApi";
+import type { WeatherData } from "../types/weather";
 
-export const NavBar = ({ setClima }) => {
+interface NavBarProps {
+  setClima: Dispatch<SetStateAction<WeatherData | null>>;
+}
+
+export const NavBar = ({ setClima }: NavBarProps) => {
   const [location, setLocation] = useState("");
 
   const handleSearch = async () => {
-    if (location.trim() === "") return;
+    if (location.trim() === "") {
+      return;
+    }
 
     const locationFormatted = location.replace(/\b\w/g, (letra) =>
       letra.toUpperCase(),
     );
     setLocation(locationFormatted);
+
     const results = await searchLocations(locationFormatted);
-    if (results.length === 0) return;
-    const city = results[0].name;
+    if (results.length === 0) {
+      return;
+    }
+
+    const city = results[0]?.name;
+    if (!city) {
+      return;
+    }
+
     const data = await getClima(city);
     setClima(data);
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLocation(event.target.value);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      void handleSearch();
+    }
   };
 
   return (
@@ -33,15 +64,17 @@ export const NavBar = ({ setClima }) => {
           className="w-8 h-full cursor-pointer"
           src="/src/assets/icons/search.svg"
           alt="Search Icon"
-          onClick={handleSearch}
+          onClick={() => {
+            void handleSearch();
+          }}
         />
         <input
           type="text"
           value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          onChange={handleChange}
           placeholder="Search location..."
           className=" text-black text-lg placeholder:text-gray-500 border-0  p-1 flex-1 ring-0 focus:ring-0 focus:outline-none bg-transparent"
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          onKeyDown={handleKeyDown}
         />
       </button>
     </header>
